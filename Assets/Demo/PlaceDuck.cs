@@ -42,12 +42,18 @@ namespace UnityEngine.XR.ARFoundation.Samples
             get { return m_PlacedPrefab; }
             set { m_PlacedPrefab = value; }
         }
-
         /// <summary>
         /// The object instantiated as a result of a successful raycast intersection with a plane.
         /// </summary>
         public GameObject spawnedObject { get; private set; }
+        public GameObject planePrefab
+        {
+            get { return m_PlanePrefab; }
+            set { m_PlanePrefab = value; }
+        }
+        public GameObject m_PlanePrefab;
 
+        GameObject ground;
         void Awake()
         {
             m_RaycastManager = GetComponent<ARRaycastManager>();
@@ -80,7 +86,7 @@ namespace UnityEngine.XR.ARFoundation.Samples
             var pos = Random.insideUnitCircle * radius;
             return new Vector3(pos.x, 0f, pos.y) + center;
         }
-
+        
         void Update()
         {
             if (!TryGetTouchPosition(out Vector2 touchPosition))
@@ -95,6 +101,17 @@ namespace UnityEngine.XR.ARFoundation.Samples
                 FollowAI duck = spawnedObject.GetComponent<FollowAI>();
                 duck.offset = RandomPosition(new Vector3(0,0,1), 0.5f);
                 ducks.Add(duck);
+
+                if (ground == null) {
+                    Debug.Log("Instantiate plane");
+                    if (s_Hits[0].trackable == null) {
+                        Debug.Log("trackable is null");
+                    }
+                    ARPlane arPlane = (ARPlane)s_Hits[0].trackable;
+                    ground = Instantiate(m_PlanePrefab);
+                    ground.transform.position = arPlane.center;
+                    ground.transform.up = arPlane.normal;
+                }
             }
         }
 
