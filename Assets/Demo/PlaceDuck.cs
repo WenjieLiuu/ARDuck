@@ -116,6 +116,8 @@ namespace UnityEngine.XR.ARFoundation.Samples
             } else {
                 foreach(var duck in ducks) {
                     duck.target = null;
+                    posBefore = new Vector3(100, 100, 100);
+                    eulerY = -100f;
                 }
             }
         }

@@ -19,10 +19,12 @@ public class FollowAI : MonoBehaviour
         get { return mTarget; }
         set {
             mTarget = value;
-            mTargetPos = mTarget.position;
-            mTargetEulerY = mTarget.eulerAngles.y;
-            Debug.Log(mTargetPos);
-            Debug.Log(mTargetEulerY);
+            if (mTarget != null) {
+                mTargetPos = mTarget.position;
+                mTargetEulerY = mTarget.eulerAngles.y;
+                Debug.Log(mTargetPos);
+                Debug.Log(mTargetEulerY);
+            }
         }
     }
 
@@ -47,10 +49,9 @@ public class FollowAI : MonoBehaviour
 
     void RandomIdle() {
         var r = Random.value;
-        Debug.Log(r);
-        if (r < 0.5f) {
+        if (r < 0.002f) {
             animator.SetTrigger("triggerIdleB");
-        } else if (r < 0.9f) {
+        } else if (r < 0.004) {
             animator.SetTrigger("triggerIdleC");
         } else {
             animator.SetFloat("dis", 0.001f);
@@ -59,8 +60,9 @@ public class FollowAI : MonoBehaviour
 
     // Update is called once per frame
     void Update () {
-        if (!mTarget) {
+        if (mTarget == null) {
             animator.SetFloat("dis", 0.001f);
+            RandomIdle();
             return;
         }
 
@@ -75,6 +77,7 @@ public class FollowAI : MonoBehaviour
 
         if (dis <= 0.01) {
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(targetPosition - transform.position), rotationSpeed * Time.deltaTime);
+            RandomIdle();
             return;
         }
 

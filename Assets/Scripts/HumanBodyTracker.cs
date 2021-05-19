@@ -106,13 +106,13 @@ namespace UnityEngine.XR.ARFoundation.Samples
         private bool m_leftUp = false;
         private bool m_rightUp = false;
         private float kMaxHeightdiff = 0.15f; // in centimeter
-        public delegate void LeftArmUpEventHandler();
+        public delegate void LeftArmUpEventHandler(ARHumanBody humanBody);
         public static event LeftArmUpEventHandler m_leftArmUp;
 
         public delegate void LeftArmDownEventHandler();
         public static event LeftArmDownEventHandler m_leftArmDown;
 
-        public delegate void RightArmUpEventHandler();
+        public delegate void RightArmUpEventHandler(ARHumanBody humanBody);
         public static event RightArmUpEventHandler m_rightArmUp;
 
         public delegate void RightArmDownEventHandler();
@@ -138,7 +138,7 @@ namespace UnityEngine.XR.ARFoundation.Samples
             m_leftArmUpCount += leftUp ? 1 : -1;
             if (m_leftArmUpCount == 20) {
                 if (m_leftArmUp != null && !m_leftUp) {
-                    m_leftArmUp();
+                    m_leftArmUp(humanBody);
                 }
                 m_leftUp = true;
                 leftText.text = "Left Up";
@@ -155,7 +155,7 @@ namespace UnityEngine.XR.ARFoundation.Samples
             m_rightArmUpCount += rightUp ? 1 : -1;
             if (m_rightArmUpCount == 20) {
                 if (m_rightArmUp != null && !m_rightUp) {
-                    m_rightArmUp();
+                    m_rightArmUp(humanBody);
                 }
                 m_rightUp = true;
                 rightText.text = "Right Up";
